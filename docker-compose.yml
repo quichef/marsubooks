@@ -1,6 +1,6 @@
 services:
   bookshelf:
-    build: .
+    image: ghcr.io/quichef/books:latest
     restart: unless-stopped
     ports:
       - "8080:8080"
