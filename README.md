@@ -14,7 +14,7 @@ Journal de lecture personnel. Ajout, notation et recherche de livres avec autoco
 Prérequis : Docker avec le plugin Compose installé.
 
 ```bash
-mkdir -p /app/books
+mkdir -p /app/books!
 cd /app/books
 curl -O https://raw.githubusercontent.com/quichef/marsubooks/refs/heads/main/docker-compose.yml
 docker compose up -d
