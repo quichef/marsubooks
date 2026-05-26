@@ -1,0 +1,17 @@
+{{define "search_results.html"}}
+{{if .}}
+<ul class="ol-results-list">
+  {{range .}}
+  <li class="ol-result-item"
+      data-title="{{.Title}}"
+      data-author="{{.Author}}"
+      data-isbn="{{.ISBN}}"
+      data-cover="{{.CoverURL}}"
+      style="cursor:pointer">
+    {{if .CoverURL}}<img src="{{.CoverURL}}" style="height:40px;vertical-align:middle;margin-right:8px;">{{end}}
+    <strong>{{.Title}}</strong>{{if .Author}} — {{.Author}}{{end}}
+  </li>
+  {{end}}
+</ul>
+{{end}}
+{{end}}

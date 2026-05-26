@@ -1,0 +1,98 @@
+{{define "form.html"}}
+<h1>{{.Title}}</h1>
+
+{{$book := .Book}}
+{{$action := "/books"}}
+{{if .Book.ID}}{{$action = printf "/books/%d" .Book.ID}}{{end}}
+
+<form method="POST" action="{{$action}}">
+
+  <fieldset>
+    <legend>Recherche automatique</legend>
+    <div class="search-row">
+      <input type="text" id="ol-search" name="q"
+             placeholder="Chercher un titre sur OpenLibrary…"
+             hx-get="/api/openlibrary"
+             hx-trigger="keyup delay:500ms"
+             hx-target="#ol-results"
+             autocomplete="off">
+    </div>
+    <div id="ol-results"></div>
+  </fieldset>
+
+  <label for="title">Titre *
+    <input type="text" id="title" name="title" required value="{{$book.Title}}" placeholder="Titre du livre">
+  </label>
+
+  <label for="author">Auteur *
+    <input type="text" id="author" name="author" required value="{{$book.Author}}" placeholder="Nom de l'auteur">
+  </label>
+
+  <div class="grid">
+    <label for="genre">Genre
+      <input type="text" id="genre" name="genre" value="{{$book.Genre}}" placeholder="Roman, SF, Essai…">
+    </label>
+    <label for="date_read">Date de lecture
+      <input type="month" id="date_read" name="date_read" value="{{$book.DateRead}}">
+    </label>
+  </div>
+
+  <div class="grid">
+    <label for="isbn">ISBN
+      <input type="text" id="isbn" name="isbn" value="{{$book.ISBN}}" placeholder="978…">
+    </label>
+    <label for="rating">Note (1-5)
+      <input type="number" id="rating" name="rating" min="0" max="5" value="{{$book.Rating}}">
+    </label>
+  </div>
+
+  <label for="cover_url">URL couverture
+    <input type="url" id="cover_url" name="cover_url" value="{{$book.CoverURL}}" placeholder="https://…">
+  </label>
+  {{if $book.CoverURL}}
+  <img id="cover-preview" src="{{$book.CoverURL}}" style="max-height:120px;margin-bottom:1rem;">
+  {{end}}
+
+  <label for="review">Mon avis (Markdown)</label>
+  <textarea id="review" name="review">{{$book.Review}}</textarea>
+
+  <div class="form-actions">
+    <button type="submit">Enregistrer</button>
+    <a href="{{if $book.ID}}/books/{{$book.ID}}{{else}}/{{end}}" role="button" class="secondary outline">Annuler</a>
+  </div>
+</form>
+
+<script>
+  const easyMDE = new EasyMDE({
+    element: document.getElementById("review"),
+    spellChecker: false,
+    autosave: { enabled: false },
+    toolbar: ["bold","italic","heading","|","quote","unordered-list","ordered-list","|","link","preview","guide"],
+  });
+
+  // update cover preview when URL changes
+  document.getElementById("cover_url").addEventListener("input", function() {
+    let preview = document.getElementById("cover-preview");
+    if (!preview) {
+      preview = document.createElement("img");
+      preview.id = "cover-preview";
+      preview.style = "max-height:120px;margin-bottom:1rem;display:block;";
+      this.insertAdjacentElement("afterend", preview);
+    }
+    preview.src = this.value;
+  });
+
+  // fill form from OpenLibrary result click
+  document.body.addEventListener("click", function(e) {
+    const item = e.target.closest(".ol-result-item");
+    if (!item) return;
+    document.getElementById("title").value    = item.dataset.title || "";
+    document.getElementById("author").value   = item.dataset.author || "";
+    document.getElementById("isbn").value     = item.dataset.isbn || "";
+    document.getElementById("cover_url").value = item.dataset.cover || "";
+    document.getElementById("cover_url").dispatchEvent(new Event("input"));
+    document.getElementById("ol-results").innerHTML = "";
+    document.getElementById("ol-search").value = "";
+  });
+</script>
+{{end}}

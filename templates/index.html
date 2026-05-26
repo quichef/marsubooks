@@ -1,0 +1,32 @@
+{{define "index.html"}}
+<h1>Ma bibliothèque</h1>
+
+{{if not .Books}}
+<p>Aucun livre pour l'instant. <a href="/books/new">Ajoute ton premier livre !</a></p>
+{{else}}
+<div class="book-grid">
+  {{range .Books}}
+  <article class="book-card">
+    {{if .CoverURL}}
+    <a href="/books/{{.ID}}">
+      <img src="{{.CoverURL}}" alt="Couverture de {{.Title}}" class="book-cover">
+    </a>
+    {{else}}
+    <a href="/books/{{.ID}}" class="no-cover">📖</a>
+    {{end}}
+    <div class="book-info">
+      <h3><a href="/books/{{.ID}}">{{.Title}}</a></h3>
+      <p class="author">{{.Author}}</p>
+      {{if .Genre}}<p class="genre"><small>{{.Genre}}</small></p>{{end}}
+      {{if .DateRead}}<p class="date"><small>Lu en {{.DateRead}}</small></p>{{end}}
+      {{if .Rating}}
+      <p class="rating">
+        {{range $i := starRange .Rating}}★{{end}}{{range $i := emptyRange .Rating}}☆{{end}}
+      </p>
+      {{end}}
+    </div>
+  </article>
+  {{end}}
+</div>
+{{end}}
+{{end}}

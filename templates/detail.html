@@ -1,0 +1,35 @@
+{{define "detail.html"}}
+<div class="book-detail">
+  <div class="book-detail-header">
+    {{if .Book.CoverURL}}
+    <img src="{{.Book.CoverURL}}" alt="Couverture" class="book-cover-large">
+    {{end}}
+    <div class="book-detail-meta">
+      <h1>{{.Book.Title}}</h1>
+      <p class="author"><strong>{{.Book.Author}}</strong></p>
+      {{if .Book.Genre}}<p>Genre : {{.Book.Genre}}</p>{{end}}
+      {{if .Book.ISBN}}<p>ISBN : <code>{{.Book.ISBN}}</code></p>{{end}}
+      {{if .Book.DateRead}}<p>Lu en : {{.Book.DateRead}}</p>{{end}}
+      {{if .Book.Rating}}
+      <p class="rating-large">
+        {{range $i := starRange .Book.Rating}}★{{end}}{{range $i := emptyRange .Book.Rating}}☆{{end}}
+      </p>
+      {{end}}
+      <div class="book-actions">
+        <a href="/books/{{.Book.ID}}/edit" role="button" class="outline">Modifier</a>
+        <a role="button" class="outline secondary"
+           onclick="if(confirm('Supprimer ce livre ?'))document.getElementById('del').submit()">Supprimer</a>
+        <form id="del" method="POST" action="/books/{{.Book.ID}}/delete" style="display:none"></form>
+      </div>
+    </div>
+  </div>
+
+  {{if .Book.Review}}
+  <section class="review">
+    <h2>Mon avis</h2>
+    <div class="review-content">{{.ReviewHTML}}</div>
+  </section>
+  {{end}}
+</div>
+<p><a href="/">← Retour à la liste</a></p>
+{{end}}

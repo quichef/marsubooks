@@ -1,0 +1,32 @@
+{{define "layout.html"}}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{.Title}} — Bookshelf</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+</head>
+<body>
+  <header class="container">
+    <nav>
+      <ul><li><strong><a href="/">📚 Bookshelf</a></strong></li></ul>
+      <ul>
+        <li><a href="/books/new">+ Ajouter</a></li>
+        <li><a href="/export/json">Export JSON</a></li>
+        <li><a href="/export/csv">Export CSV</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="container">
+    {{if eq .Page "index"}}{{template "index.html" .}}{{end}}
+    {{if eq .Page "form"}}{{template "form.html" .}}{{end}}
+    {{if eq .Page "detail"}}{{template "detail.html" .}}{{end}}
+  </main>
+</body>
+</html>
+{{end}}
