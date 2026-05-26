@@ -1,4 +1,3 @@
 data/
 *.db
 bookshelf
-go.sum
