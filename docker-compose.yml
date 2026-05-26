@@ -1,6 +1,6 @@
 services:
   bookshelf:
-    image: ghcr.io/quichef/books:latest
+    image: ghcr.io/quichef/marsubooks:latest
     restart: unless-stopped
     ports:
       - "8080:8080"
